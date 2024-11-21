@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1052311756861",
+    "project_id": "cauping-8df9f",
+    "storage_bucket": "cauping-8df9f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052311756861:android:6fb581e8ff6f57ad238a54",
+        "android_client_info": {
+          "package_name": "com.example.cauping"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4SX4IOUjV7CDrsavCHGv0y6J1uW_GtcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
