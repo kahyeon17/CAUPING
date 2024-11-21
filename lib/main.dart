@@ -1,6 +1,23 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 
 void main() {
+=======
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'LoginPage.dart';
+import 'RegisterPage.dart';
+import 'SuccessRegister.dart';
+import 'HomePage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'Colors.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+>>>>>>> test_ping
   runApp(const MyApp());
 }
 
@@ -11,26 +28,59 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< HEAD
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: '행사 등록'),
+=======
+      title: 'Cauping',
+      theme: ThemeData(
+        primaryColor: PrimaryColor,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8), // 둥근 모서리 스타일
+            ),
+          ),
+        ),
+      ),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              return const HomePage();
+            } else {
+              return const MyHomePage();
+            }
+          }
+      ),
+>>>>>>> test_ping
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+<<<<<<< HEAD
   const MyHomePage({super.key, required this.title});
 
   final String title;
+=======
+  const MyHomePage({Key? key}) : super(key: key);
+>>>>>>> test_ping
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+<<<<<<< HEAD
   EventInfo eventInfo = EventInfo('', '', '', '', '', '', '', '', '');
   final List<String> _deptList = [
     '인문대학',
@@ -62,10 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   List<bool> _selected = List.generate(8, (index) => false); // 초기 상태 설정
   String selectedOption = '';
+=======
+  get result => null;
+>>>>>>> test_ping
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(widget.title),
@@ -245,3 +299,75 @@ class EventInfo {
     this.image,
   );
 }
+=======
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // 로고
+            Padding(
+              padding: const EdgeInsets.only(top: 100.0),
+              child: Image.asset(
+                'assets/images/logo.jpg', // 로고 이미지 경로 설정
+                width: 300,
+                height: 150,
+              ),
+            ),
+            const SizedBox(height: 270),
+            // 회원가입 버튼
+            Container(
+              width: 330,
+              height: 45,
+              margin: const EdgeInsets.only(bottom: 10),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterPage(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: SecondaryColor, // 연한 파란색 배경
+                ),
+                child: const Text(
+                  '회원가입',
+                  style: TextStyle(
+                    color: PrimaryColor, // 진한 파란색 텍스트
+                  ),
+                ),
+              ),
+            ),
+            // 로그인 버튼
+            Container(
+              width: 330,
+              height: 45,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Loginpage(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: PrimaryColor, // 진한 파란색 배경
+                ),
+                child: const Text(
+                  '로그인',
+                  style: TextStyle(
+                    color: Colors.white, // 흰색 텍스트
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+>>>>>>> test_ping
