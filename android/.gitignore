@@ -12,4 +12,4 @@ key.properties
 **/*.keystore
 **/*.jks
 
-firebase.config.dart
+firebase_config.dart
