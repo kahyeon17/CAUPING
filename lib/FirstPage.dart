@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cauping/EventRegisterPage.dart';
 import 'package:cauping/ExplorePage.dart';
 import 'package:cauping/HomePage.dart';
+import 'Colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFD9E7FF)),
+        //primaryColor: PrimaryColor,
+        colorScheme: ColorScheme.fromSeed(seedColor: PrimaryColor),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white, // 네비게이션 바 배경색
+          selectedItemColor: PrimaryColor, // 선택된 아이템 색상
+          unselectedItemColor: Colors.grey, // 선택되지 않은 아이템 색상
+        ),
         useMaterial3: true,
       ),
       home: const MainScreen(),

@@ -25,6 +25,13 @@ class MyApp extends StatelessWidget {
       title: 'Cauping',
       theme: ThemeData(
         primaryColor: PrimaryColor,
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.fromSeed(seedColor: PrimaryColor),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          selectedItemColor: PrimaryColor,
+          unselectedItemColor: Colors.grey,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             textStyle: const TextStyle(
