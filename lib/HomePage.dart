@@ -1,3 +1,4 @@
+import 'package:cauping/Explore.dart';
 import 'package:cauping/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
               FirebaseAuth.instance.signOut();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const MyHomePage()),
+                MaterialPageRoute(builder: (context) => const ExploreScreen()),
               );
             },
             icon: const Icon(Icons.logout),

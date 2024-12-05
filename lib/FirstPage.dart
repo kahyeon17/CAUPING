@@ -1,29 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:cauping/EventRegisterPage.dart';
-import 'package:cauping/ExplorePage.dart';
+import 'package:cauping/ExploreScreen.dart';
 import 'package:cauping/HomePage.dart';
 import 'Colors.dart';
 
-void main() {
+bool isNaverMapInitialized = false; // 네이버 지도 SDK 초기화 상태 관리
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 네이버 지도 초기화
+  try {
+    // 네이버 지도 SDK 초기화 코드 삽입 (예: NaverMapSdk.instance.initialize)
+    isNaverMapInitialized = true; // 초기화 성공 시 true로 설정
+  } catch (e) {
+    debugPrint("네이버 지도 초기화 실패: $e");
+  }
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        //primaryColor: PrimaryColor,
         colorScheme: ColorScheme.fromSeed(seedColor: PrimaryColor),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.white, // 네비게이션 바 배경색
-          selectedItemColor: PrimaryColor, // 선택된 아이템 색상
-          unselectedItemColor: Colors.grey, // 선택되지 않은 아이템 색상
+          backgroundColor: Colors.white,
+          selectedItemColor: PrimaryColor,
+          unselectedItemColor: Colors.grey,
         ),
         useMaterial3: true,
       ),
@@ -40,12 +50,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0; // 기본적으로 '탐색' 탭이 선택됨
+  int _selectedIndex = 0;
 
-  static const List<Widget> _screens = <Widget>[
-    ExploreScreen(), // 탐색 화면
-    RegisterScreen(title: '행사 등록'), // 등록 화면
-    HomePage(), // 프로필 화면
+  late final List<Widget> _screens = [
+    ExploreScreen(isNaverMapInitialized: isNaverMapInitialized), // 탐색 화면
+    const RegisterScreen(title: '행사 등록'), // 등록 화면
+    const HomePage(), // 프로필 화면
   ];
 
   void _onItemTapped(int index) {
@@ -57,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex], // 선택된 화면을 표시
+      body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
