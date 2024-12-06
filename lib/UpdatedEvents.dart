@@ -2,8 +2,8 @@ import 'package:cauping/EventRegisterPage.dart';
 import 'package:flutter/material.dart';
 import 'Colors.dart';
 import 'EventInfo.dart';
-import 'EventEditPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'EventCard.dart';
 
 class UpdatedEvents extends StatefulWidget {
   const UpdatedEvents({super.key});
@@ -183,119 +183,42 @@ class _UpdatedEventsState extends State<UpdatedEvents> {
               itemCount: events.length,
               itemBuilder: (context, index) {
                 final event = events[index];
-                return Card(
-                  color: Colors.white,
-                  elevation: 0,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.grey, // 선 색상
-                          width: 0.5, // 선 두께
-                        ),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    event.name,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 3),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${event.location.building} ${event.location.detail}',
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        '${event.time.start} ~ ${event.time.end}',
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              PopupMenuButton<String>(
-                                color: Colors.white,
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (value) {
-                                  switch (value) {
-                                    case 'edit':
-                                      // 수정 페이지로 이동
-                                      _editEvent(event, event.eventId);
-                                      break;
-                                    case 'delete':
-                                      // 삭제 동작
-                                      deleteEvent(event.eventId);
-                                      break;
-                                  }
-                                },
-                                itemBuilder: (BuildContext context) {
-                                  return [
-                                    const PopupMenuItem(
-                                      value: 'edit',
-                                      child: Text('수정'),
-                                    ),
-                                    const PopupMenuItem(
-                                      value: 'delete',
-                                      child: Text('삭제'),
-                                    ),
-                                  ];
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            event.description,
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                          const SizedBox(height: 10),
-                          //사진 불러올 자리
-                          if (event.images.isNotEmpty)
-                            GridView.builder(
-                              shrinkWrap: true, // 부모 스크롤 안에서 동작하도록 설정
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3, // 한 줄에 3개의 이미지
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 4,
-                              ),
-                              itemCount: event.images.length,
-                              itemBuilder: (context, index) {
-                                return Image.network(
-                                  event
-                                      .images[index], // Firestore에서 가져온 이미지 URL
-                                  fit: BoxFit.cover,
-                                );
-                              },
+                return Stack(
+                  children: [
+                    EventCard(event: event, onTap: () {}),
+                    Positioned(
+                      top: 10, // 상단으로부터의 거리
+                      right: 10, // 우측으로부터의 거리
+                      child: PopupMenuButton<String>(
+                        color: Colors.white,
+                        icon: const Icon(Icons.more_vert),
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'edit':
+                              // 수정 페이지로 이동
+                              _editEvent(event, event.eventId);
+                              break;
+                            case 'delete':
+                              // 삭제 동작
+                              deleteEvent(event.eventId);
+                              break;
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            const PopupMenuItem(
+                              value: 'edit',
+                              child: Text('수정'),
                             ),
-                          const SizedBox(height: 10),
-                        ],
+                            const PopupMenuItem(
+                              value: 'delete',
+                              child: Text('삭제'),
+                            ),
+                          ];
+                        },
                       ),
                     ),
-                  ),
+                  ],
                 );
               },
             );

@@ -57,7 +57,7 @@ final List<BuildingInfo> buildings = [
   BuildingInfo(
     id: "central_library",
     name: "204관(중앙도서관)",
-    location: "중앙도서관",
+    location: "204관(중앙도서관)",
     markerPosition: const NLatLng(37.504681, 126.957884),
     polygonCoords: [
       const NLatLng(37.505069, 126.957735), // 좌측 상단
@@ -70,7 +70,7 @@ final List<BuildingInfo> buildings = [
   BuildingInfo(
     id: "memorial_hall",
     name: "310관(100주년기념관)",
-    location: "100주년 기념관 (310관)",
+    location: "310관(100주년기념관)",
     markerPosition: const NLatLng(37.503595, 126.955997),
     polygonCoords: [
       const NLatLng(37.504255, 126.955707),
@@ -82,8 +82,8 @@ final List<BuildingInfo> buildings = [
   ),
   BuildingInfo(
     id: "bldg",
-    name: "제2공학관 (208관)",
-    location: "제2공학관 (208관)",
+    name: "208관(제2공학관)",
+    location: "208관(제2공학관)",
     markerPosition: const NLatLng(37.503629, 126.957062),
     polygonCoords: [
       const NLatLng(37.503950, 126.956942),
@@ -107,34 +107,3 @@ final List<BuildingInfo> buildings = [
     ],
   ),
 ];
-
-Future<List<EventInfo>> fetchMatchingBuildings() async {
-  try {
-    // Firestore 인스턴스 가져오기
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // 결과를 저장할 리스트
-    List<EventInfo> eventsAtBuildings = [];
-
-    // Firestore에서 모든 EventInfo 가져오기
-    QuerySnapshot snapshot = await firestore.collection('events').get();
-    List<EventInfo> allEvents =
-        snapshot.docs.map((doc) => EventInfo.fromFirestore(doc)).toList();
-
-    // 모든 EventInfo 객체를 순회하며 BuildingInfo의 name과 일치하는 데이터를 필터링
-    // for (EventInfo event in allEvents) {
-    //   for (BuildingInfo building in buildings) {
-    //     if (event.location.building == building.name) {
-    //       eventsAtBuildings.add(event);
-    //       break; // 일치하는 건물 발견 시 더 이상 반복 필요 없음
-    //     }
-    //   }
-    // }
-
-    //return eventsAtBuildings; // 결과 반환
-    return allEvents;
-  } catch (e) {
-    print('파이어스토어 데이터를 가져오는 중 오류 발생: $e');
-    return [];
-  }
-}
