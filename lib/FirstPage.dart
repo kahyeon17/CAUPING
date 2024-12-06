@@ -3,8 +3,26 @@ import 'package:cauping/EventRegisterPage.dart';
 import 'package:cauping/ExplorePage.dart';
 import 'package:cauping/HomePage.dart';
 import 'Colors.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
-void main() {
+bool isNaverMapInitialized = false; // 네이버 지도 SDK 초기화 상태 관리
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 네이버 지도 SDK 초기화ㅇ
+  try {
+    await NaverMapSdk.instance.initialize(
+      clientId: '4jfm9e2by4', // 네이버 클라이언트 ID
+      onAuthFailed: (error) {
+        debugPrint("네이버맵 인증 오류: ${error.message}");
+      },
+    );
+    isNaverMapInitialized = true; // 초기화 성공 시 true로 설정
+  } catch (e) {
+    debugPrint("네이버 지도 초기화 실패: $e");
+  }
+
   runApp(const MyApp());
 }
 
@@ -42,10 +60,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0; // 기본적으로 '탐색' 탭이 선택됨
 
-  static const List<Widget> _screens = <Widget>[
-    ExploreScreen(), // 탐색 화면
-    RegisterScreen(title: '행사 등록'), // 등록 화면
-    HomePage(), // 프로필 화면
+  late final List<Widget> _screens = [
+    ExploreScreen(isNaverMapInitialized: isNaverMapInitialized), // 탐색 화면
+    const RegisterScreen(title: '행사 등록'), // 등록 화면
+    const HomePage(), // 프로필 화면
   ];
 
   void _onItemTapped(int index) {
