@@ -3,6 +3,7 @@ import 'Colors.dart';
 import 'ExplorePage.dart';
 import 'EventInfo.dart';
 import 'EventCard.dart';
+import 'EventDetailsPage.dart';
 
 class SavedEvents extends StatefulWidget {
   //final Map<String, EventInfo> bookmarkedEvents;
@@ -20,6 +21,7 @@ class _SavedEventsState extends State<SavedEvents> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           '행사 저장 목록',
           style: TextStyle(
@@ -29,6 +31,7 @@ class _SavedEventsState extends State<SavedEvents> {
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        elevation: 0.5,
       ),
       body: savedEvents.isEmpty
           ? const Center(
@@ -45,11 +48,20 @@ class _SavedEventsState extends State<SavedEvents> {
                   children: [
                     EventCard(
                       event: event,
-                      onTap: () {},
+                      onTap: () {
+                        // Navigator를 사용하여 상세 페이지로 이동
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EventDetailsPage(event: event),
+                          ),
+                        );
+                      },
                     ),
                     Positioned(
                       top: 5, // 상단으로부터의 거리
-                      right: 10, // 우측으로부터의 거리
+                      right: 5, // 우측으로부터의 거리
                       child: IconButton(
                         icon: Icon(
                           bookmarkedEvents.containsKey(event.eventId)

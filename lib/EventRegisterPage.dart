@@ -402,6 +402,83 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Navigator.of(context).pop(); // 다이얼로그 닫기
   }
 
+  Future<void> _showCancelDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 사용자가 배경 클릭으로 닫지 못하도록 설정
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: SecondaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0), // 다이얼로그의 모서리를 둥글게
+          ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.72, // 화면의 80% 너비
+            height: MediaQuery.of(context).size.height * 0.2, // 화면의 25% 높이
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    '행사 등록 삭제',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '지금 돌아가시면 행사 등록이 삭제됩니다.\n삭제하시겠습니까?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // 취소 버튼
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // 다이얼로그 닫기
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                        ),
+                        child: const Text(
+                          '취소',
+                          style: TextStyle(fontSize: 13.0, color: Colors.black),
+                        ),
+                      ),
+                      // 삭제 버튼
+                      const SizedBox(width: 15),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // 다이얼로그 닫기
+                          setState(() {
+                            _resetForm();
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: PrimaryColor,
+                        ),
+                        child: const Text(
+                          '삭제',
+                          style: TextStyle(fontSize: 13.0, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   /// 폼 초기화 함수
   void _resetForm() {
     // 폼 초기화
@@ -458,14 +535,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               fontSize: 17,
               fontWeight: FontWeight.bold,
             )),
+        centerTitle: true,
+        elevation: 0.5,
         //leading: IconButton(onPressed: () {}, icon: const Icon(Icons.close)),
         actions: widget.showCancelButton
             ? [
                 TextButton(
                   onPressed: () {
-                    setState(() {
-                      _resetForm();
-                    });
+                    _showCancelDialog(context);
                   },
                   child: const Text('취소',
                       style: TextStyle(

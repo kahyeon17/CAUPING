@@ -18,7 +18,7 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-  late NaverMapController _mapController;
+  //late NaverMapController _mapController;
   String? selectedLocation; // 선택된 마커의 위치
   final DraggableScrollableController _scrollableController =
       DraggableScrollableController();
@@ -70,7 +70,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       // Firestore에서 모든 EventInfo 가져오기
-      QuerySnapshot snapshot = await firestore.collection('events').get();
+      QuerySnapshot snapshot = await firestore
+          .collection('events')
+          .orderBy('date.startDate', descending: false)
+          .get();
       List<EventInfo> allEvents =
           snapshot.docs.map((doc) => EventInfo.fromFirestore(doc)).toList();
 
@@ -192,8 +195,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
           // 행사 정보 목록 영역
           DraggableScrollableSheet(
             controller: _scrollableController, // Controller 추가
-            initialChildSize: 0.3, // 초기 높이 (화면의 30%)
-            minChildSize: 0.3, // 최소 높이 (화면의 30%)
+            initialChildSize: 0.35, // 초기 높이 (화면의 30%)
+            minChildSize: 0.35, // 최소 높이 (화면의 30%)
             maxChildSize: 0.8, // 최대 높이 (화면의 80%)
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
@@ -230,96 +233,181 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ...(selectedEvent == null
                         ? [
                             // 필터링 영역
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  // 진행 상태 필터
-                                  DropdownButton<String>(
-                                    value: _selectedStatus,
-                                    items: _statusList
-                                        .map((status) => DropdownMenuItem(
-                                              value: status,
-                                              child: Text(
-                                                status,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedStatus = value!;
-                                        _eventsList = fetchEvents();
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(width: 5),
-                                  // 소속 대학 필터
-                                  DropdownButton<String>(
-                                    value: _selectedCollege == '소속 대학'
-                                        ? null
-                                        : _selectedCollege, // 선택되지 않았을 때 null로 설정
-                                    hint: const Text(
-                                      '소속 대학', // 초기 힌트 텍스트
-                                      style: TextStyle(
-                                        fontSize: 12,
+                            Container(
+                              padding: const EdgeInsets.only(
+                                  left: 15, right: 60, top: 10, bottom: 10),
+                              //width: MediaQuery.of(context).size.width * 0.8,
+                              height: 50,
+                              child: IntrinsicWidth(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    // 진행 상태 필터
+                                    Flexible(
+                                      flex: 3,
+                                      child: DropdownButtonFormField<String>(
+                                        value: _selectedStatus, // 선택된 값
+                                        decoration: InputDecoration(
+                                          filled: true, // 배경색 활성화
+                                          fillColor: const Color.fromARGB(
+                                              255, 236, 242, 253),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 3),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // 테두리 둥글게
+                                            borderSide: const BorderSide(
+                                                color: CaupingLightGray),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            borderSide: const BorderSide(
+                                                color: PrimaryColor),
+                                          ),
+                                        ),
+
+                                        items: _statusList
+                                            .map((status) => DropdownMenuItem(
+                                                  value: status,
+                                                  child: Text(
+                                                    status,
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              _selectedStatus =
+                                                  value; // 선택된 상태 업데이트
+                                              _eventsList =
+                                                  fetchEvents(); // 이벤트 목록 업데이트
+                                            });
+                                          }
+                                        },
                                       ),
                                     ),
-                                    items: _deptList
-                                        .map((college) => DropdownMenuItem(
-                                              value: college,
-                                              child: Text(
-                                                college,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      if (value != null) {
-                                        setState(() {
-                                          _selectedCollege = value;
-                                          _eventsList = fetchEvents();
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  const SizedBox(width: 5),
-                                  // 행사 유형 필터
-                                  DropdownButton<String>(
-                                    value: _selectedEventType == '행사 유형'
-                                        ? null
-                                        : _selectedEventType,
-                                    hint: const Text(
-                                      '행사 유형', // 초기 힌트 텍스트
-                                      style: TextStyle(
-                                        fontSize: 12,
+
+                                    const SizedBox(width: 2),
+                                    const VerticalDivider(
+                                      color: CaupingLightGray, // 선 색상
+                                      thickness: 3, // 선 두께
+                                    ),
+                                    const SizedBox(width: 2),
+
+                                    // 소속 대학 필터
+                                    Flexible(
+                                      flex: 4,
+                                      child: DropdownButtonFormField<String>(
+                                        value: _selectedCollege == '소속 대학'
+                                            ? null
+                                            : _selectedCollege,
+                                        isExpanded: false,
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 8, vertical: 3),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // 테두리 둥글게
+                                            borderSide: const BorderSide(
+                                                color: CaupingLightGray),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            borderSide: const BorderSide(
+                                                color: PrimaryColor),
+                                          ),
+                                        ),
+                                        hint: const Text(
+                                          '소속 대학', // 초기 힌트 텍스트
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        items: _deptList
+                                            .map((college) => DropdownMenuItem(
+                                                  value: college,
+                                                  child: Text(
+                                                    college,
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              _selectedCollege = value;
+                                              _eventsList = fetchEvents();
+                                            });
+                                          }
+                                        },
                                       ),
                                     ),
-                                    items: _optList
-                                        .map((eventType) => DropdownMenuItem(
-                                              value: eventType,
-                                              child: Text(
-                                                eventType,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedEventType = value!;
-                                        _eventsList = fetchEvents();
-                                      });
-                                    },
-                                  ),
-                                ],
+
+                                    const SizedBox(width: 7),
+                                    // 행사 유형 필터
+                                    Flexible(
+                                      flex: 3,
+                                      child: DropdownButtonFormField<String>(
+                                        value: _selectedEventType == '행사 유형'
+                                            ? null
+                                            : _selectedEventType,
+                                        decoration: InputDecoration(
+                                          labelStyle: const TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 3),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // 테두리 둥글게
+                                            borderSide: const BorderSide(
+                                                color: CaupingLightGray),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue),
+                                          ),
+                                        ),
+                                        hint: const Text(
+                                          '행사 유형', // 초기 힌트 텍스트
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        items: _optList
+                                            .map(
+                                                (eventType) => DropdownMenuItem(
+                                                      value: eventType,
+                                                      child: Text(
+                                                        eventType,
+                                                        style: const TextStyle(
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedEventType = value!;
+                                            _eventsList = fetchEvents();
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             Expanded(
@@ -341,7 +429,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   } else {
                                     final events = snapshot.data!;
                                     return ListView.builder(
-                                      padding: EdgeInsets.zero, // 리스트 패딩 제거
+                                      padding: EdgeInsets.only(
+                                          left: 3.0, right: 3.0), // 리스트 패딩 제거
                                       shrinkWrap: true, // 리스트 높이를 컨텐츠 크기로 설정
                                       physics:
                                           const ClampingScrollPhysics(), // 리스트 스크롤 제어
@@ -352,45 +441,46 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                         // 북마크 상태 가져오기 (초기값 false)
                                         bool isBookmarked = bookmarkedEvents
                                             .containsKey(event.eventId);
-                                        return GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              selectedEvent = event;
-                                              _scrollableController.animateTo(
-                                                0.8, // 상세 페이지를 표시할 때 최대 높이로 확장
-                                                duration: const Duration(
-                                                    milliseconds: 200),
-                                                curve: Curves.easeInOut,
-                                              );
-                                            });
-                                          },
-                                          child: Stack(
-                                            children: [
-                                              EventCard(
-                                                event: event,
-                                                onTap: () {
+                                        return Stack(
+                                          children: [
+                                            EventCard(
+                                              event: event,
+                                              onTap: () {
+                                                // 조건문을 사용하여 animateTo 숫자를 다르게 설정
+                                                final targetHeight =
+                                                    event.images.isNotEmpty
+                                                        ? 0.65
+                                                        : 0.4;
+                                                _scrollableController
+                                                    .animateTo(
+                                                  targetHeight, // 상세 페이지를 표시할 때 최대 높이로 확장
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                  curve: Curves.easeInOut,
+                                                )
+                                                    .then((_) {
                                                   setState(() {
                                                     selectedEvent = event;
                                                   });
+                                                });
+                                              },
+                                            ),
+                                            Positioned(
+                                              top: 2, // 상단으로부터의 거리
+                                              right: 5, // 우측으로부터의 거리
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  isBookmarked
+                                                      ? Icons.bookmark
+                                                      : Icons.bookmark_border,
+                                                ),
+                                                onPressed: () {
+                                                  // 북마크 추가/제거
+                                                  toggleBookmark(event);
                                                 },
                                               ),
-                                              Positioned(
-                                                top: 5, // 상단으로부터의 거리
-                                                right: 10, // 우측으로부터의 거리
-                                                child: IconButton(
-                                                  icon: Icon(
-                                                    isBookmarked
-                                                        ? Icons.bookmark
-                                                        : Icons.bookmark_border,
-                                                  ),
-                                                  onPressed: () {
-                                                    // 북마크 추가/제거
-                                                    toggleBookmark(event);
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         );
                                       },
                                     );
@@ -401,205 +491,37 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           ]
                         : [
                             // 이벤트 상세 페이지
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Stack(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            selectedEvent!.name,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 3),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                '${selectedEvent!.location.building} ${selectedEvent!.location.detail}',
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                '${selectedEvent!.time.start} ~ ${selectedEvent!.time.end}',
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        selectedEvent!.description,
-                                        style: const TextStyle(fontSize: 15),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      //사진 불러올 자리
-                                      if (selectedEvent!.images.isNotEmpty)
-                                        GridView.builder(
-                                          padding: EdgeInsets.zero,
-                                          shrinkWrap:
-                                              true, // 부모 스크롤 안에서 동작하도록 설정
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2, // 한 줄에 3개의 이미지
-                                            crossAxisSpacing: 10,
-                                            mainAxisSpacing: 4,
-                                          ),
-                                          itemCount:
-                                              selectedEvent!.images.length,
-                                          itemBuilder: (context, index) {
-                                            return Image.network(
-                                              selectedEvent!.images[
-                                                  index], // Firestore에서 가져온 이미지 URL
-                                              fit: BoxFit.cover,
-                                            );
-                                          },
-                                        ),
-                                      const SizedBox(height: 15),
-                                      Divider(
-                                        color: CaupingLightGray, // 선 색상
-                                        thickness: 5, // 선 두께
-                                      ),
-                                      const SizedBox(height: 15),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            '상세정보',
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                '운영기간',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 30),
-                                              Text(
-                                                '${selectedEvent!.date.startDate} ~ ${selectedEvent!.date.endDate}',
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                '운영주체',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 30),
-                                              Text(
-                                                selectedEvent!.host,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                '행사대상',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 30),
-                                              Text(
-                                                selectedEvent!.target,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                '행사유형',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 30),
-                                              Text(
-                                                selectedEvent!.category,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Positioned(
-                                    right: 30,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        bookmarkedEvents.containsKey(
-                                                selectedEvent!.eventId)
-                                            ? Icons.bookmark
-                                            : Icons.bookmark_border,
-                                      ),
-                                      onPressed: () {
-                                        // 북마크 추가/제거
-                                        toggleBookmark(selectedEvent!);
-                                      },
+                            Stack(
+                              children: [
+                                EventDetailsCard(event: selectedEvent!),
+                                Positioned(
+                                  right: 40,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      bookmarkedEvents.containsKey(
+                                              selectedEvent!.eventId)
+                                          ? Icons.bookmark
+                                          : Icons.bookmark_border,
                                     ),
+                                    onPressed: () {
+                                      // 북마크 추가/제거
+                                      toggleBookmark(selectedEvent!);
+                                    },
                                   ),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: // X 버튼
-                                        IconButton(
-                                      icon: const Icon(Icons.close),
-                                      onPressed: () {
-                                        setState(() {
-                                          selectedEvent = null; // 선택된 이벤트 해제
-                                        });
-                                      },
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                Positioned(
+                                  right: 5,
+                                  child: // X 버튼
+                                      IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () {
+                                      setState(() {
+                                        selectedEvent = null; // 선택된 이벤트 해제
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
                           ]),
                   ],

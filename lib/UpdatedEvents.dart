@@ -21,45 +21,54 @@ class _UpdatedEventsState extends State<UpdatedEvents> {
     _events = fetchEvents(); // Firebase 데이터 가져오기
   }
 
-  Future<void> deleteEvent(String eventId) async {
+  Future<void> deleteEvent(String eventId, String eventName) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: SecondaryColor,
+          titlePadding: const EdgeInsets.only(top: 20.0), // 제목 패딩 조정
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15.0), // 내용 패딩 조정
           title: const Text(
             '행사 삭제',
-            style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center, // 제목을 가운데 정렬
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.0,
+            ),
           ),
-          content: const Text('행사를 삭제하시겠습니까?'),
+          content: Text(
+            '$eventName 행사를\n삭제하시겠습니까?',
+            textAlign: TextAlign.center,
+          ),
           actions: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop(true); // 예 선택
+                    Navigator.of(context).pop(false);
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(70, 40), // 버튼 최소 크기 (너비, 높이)
-                    //maximumSize: const Size(80, 40),
+                    backgroundColor: Colors.white,
                   ),
                   child: const Text(
-                    '예',
-                    style: TextStyle(fontSize: 13),
+                    '취소',
+                    style: TextStyle(fontSize: 13, color: Colors.black),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 15),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop(false); // 아니오 선택
+                    Navigator.of(context).pop(true);
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(70, 40), // 버튼 최소 크기 (너비, 높이)
-                    //maximumSize: const Size(80, 40),
+                    backgroundColor: PrimaryColor,
                   ),
                   child: const Text(
-                    '아니오',
-                    style: TextStyle(fontSize: 13),
+                    '삭제',
+                    style: TextStyle(fontSize: 13, color: Colors.white),
                   ),
                 ),
               ],
@@ -187,8 +196,8 @@ class _UpdatedEventsState extends State<UpdatedEvents> {
                   children: [
                     EventCard(event: event, onTap: () {}),
                     Positioned(
-                      top: 10, // 상단으로부터의 거리
-                      right: 10, // 우측으로부터의 거리
+                      top: 5, // 상단으로부터의 거리
+                      right: 5, // 우측으로부터의 거리
                       child: PopupMenuButton<String>(
                         color: Colors.white,
                         icon: const Icon(Icons.more_vert),
@@ -200,7 +209,7 @@ class _UpdatedEventsState extends State<UpdatedEvents> {
                               break;
                             case 'delete':
                               // 삭제 동작
-                              deleteEvent(event.eventId);
+                              deleteEvent(event.eventId, event.name);
                               break;
                           }
                         },
