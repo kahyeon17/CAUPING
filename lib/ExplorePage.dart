@@ -494,7 +494,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                 final targetHeight =
                                                     event.images.isNotEmpty
                                                         ? 0.65
-                                                        : 0.4;
+                                                        : 0.45;
                                                 _scrollableController
                                                     .animateTo(
                                                   targetHeight, // 상세 페이지를 표시할 때 최대 높이로 확장
