@@ -5,20 +5,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'EventInfo.dart';
 import 'BuildingInfo.dart';
 import 'EventCard.dart';
-import 'Colors.dart';
 
 Map<String, EventInfo> bookmarkedEvents = {}; // 이벤트 ID별 북마크 상태를 저장하는 Map
 
 class ExploreScreen extends StatefulWidget {
-  final bool isNaverMapInitialized;
-
-  const ExploreScreen({super.key, required this.isNaverMapInitialized});
+  const ExploreScreen({Key? key}) : super(key: key);
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  bool isNaverMapInitialized = false;
+  String? errorMessage; // 오류 메시지
   //late NaverMapController _mapController;
   String? selectedLocation; // 선택된 마커의 위치
   final DraggableScrollableController _scrollableController =
@@ -28,6 +27,32 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String _selectedCollege = '소속 대학';
   String _selectedEventType = '행사 유형';
   EventInfo? selectedEvent; // 선택된 행사를 관리
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNaverMap();
+  }
+
+  Future<void> _initializeNaverMap() async {
+    try {
+      await NaverMapSdk.instance.initialize(
+        clientId: '4jfm9e2by4',
+        onAuthFailed: (error) {
+          setState(() {
+            errorMessage = "네이버맵 인증 오류: ${error.message}";
+          });
+        },
+      );
+      setState(() {
+        isNaverMapInitialized = true;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = "네이버 지도 초기화 실패: $e";
+      });
+    }
+  }
 
   final List<String> _statusList = [
     '진행 중',
@@ -121,13 +146,31 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isNaverMapInitialized) {
+    if (!isNaverMapInitialized) {
       return const Scaffold(
         body: Center(
           child: Text(
             '네이버 지도 SDK가 초기화되지 않았습니다.',
             style: TextStyle(color: Colors.red),
           ),
+        ),
+      );
+    }
+
+    if (errorMessage != null) {
+      // 초기화 실패 시 에러 메시지 표시
+      return Scaffold(
+        body: Center(
+          child: Text(errorMessage!),
+        ),
+      );
+    }
+
+    if (!isNaverMapInitialized) {
+      // 초기화 중 로딩 표시
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
         ),
       );
     }
