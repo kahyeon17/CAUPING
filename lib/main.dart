@@ -171,36 +171,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0; // 기본적으로 '탐색' 탭이 선택됨
 
-  // late final List<Widget> _screens;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _screens = [
-  //     FutureBuilder(
-  //       future: NaverMapSdk.instance.initialize(
-  //         clientId: '4jfm9e2by4',
-  //         onAuthFailed: (error) {
-  //           debugPrint("네이버맵 인증 오류: ${error.message}");
-  //         },
-  //       ),
-  //       builder: (context, snapshot) {
-  //         if (snapshot.connectionState == ConnectionState.waiting) {
-  //           return const Center(child: CircularProgressIndicator()); // 로딩 화면 표시
-  //         } else if (snapshot.hasError) {
-  //           return Center(
-  //               child: Text("네이버 지도 초기화 실패: ${snapshot.error}")); // 에러 메시지 표시
-  //         } else {
-  //           return const ExploreScreen(
-  //               isNaverMapInitialized: true); // 초기화 완료 후 탐색 화면
-  //         }
-  //       },
-  //     ),
-  //     const RegisterScreen(title: '행사 등록'), // 등록 화면
-  //     const HomePage(), // 프로필 화면
-  //   ];
-  // }
-
   late final List<Widget> _screens = [
     const ExploreScreen(), // 탐색 화면
     const RegisterScreen(title: '행사 등록'), // 등록 화면
