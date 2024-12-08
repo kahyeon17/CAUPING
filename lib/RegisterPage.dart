@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'Colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
@@ -92,7 +91,7 @@ class _RegisterFormState extends State<RegisterForm> {
             Text(
               'STEP 1 계정 생성',
               style: TextStyle(
-                color: Colors.black,
+                color: CaupingBlack,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
@@ -101,7 +100,7 @@ class _RegisterFormState extends State<RegisterForm> {
             Text(
               '학교 이메일을 입력해주세요.',
               style: TextStyle(
-                color: Colors.black,
+                color: CaupingBlack,
                 fontWeight: FontWeight.normal,
                 fontSize: 15,
               ),
@@ -120,8 +119,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: PrimaryColor),
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 11, horizontal: 10),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 11, horizontal: 10),
               ),
               onChanged: (value) {
                 setState(() {
@@ -144,7 +143,7 @@ class _RegisterFormState extends State<RegisterForm> {
             Text(
               '비밀번호를 입력해주세요.',
               style: TextStyle(
-                color: Colors.black,
+                color: CaupingBlack,
                 fontWeight: FontWeight.normal,
                 fontSize: 15,
               ),
@@ -160,8 +159,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 border: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 11, horizontal: 10),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 11, horizontal: 10),
               ),
               onChanged: (value) {
                 setState(() {
@@ -183,7 +182,7 @@ class _RegisterFormState extends State<RegisterForm> {
             Text(
               'STEP 2 프로필 등록',
               style: TextStyle(
-                color: Colors.black,
+                color: CaupingBlack,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
@@ -192,7 +191,7 @@ class _RegisterFormState extends State<RegisterForm> {
             Text(
               '닉네임을 입력해주세요.',
               style: TextStyle(
-                color: Colors.black,
+                color: CaupingBlack,
                 fontWeight: FontWeight.normal,
                 fontSize: 15,
               ),
@@ -213,14 +212,14 @@ class _RegisterFormState extends State<RegisterForm> {
                   borderSide: BorderSide(color: PrimaryColor),
                 ),
                 contentPadding:
-                EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+                    EdgeInsets.symmetric(vertical: 11, horizontal: 10),
               ),
             ),
             const SizedBox(height: 15),
             Text(
               '소속대학을 선택해주세요.',
               style: TextStyle(
-                color: Colors.black,
+                color: CaupingBlack,
                 fontWeight: FontWeight.normal,
                 fontSize: 15,
               ),
@@ -230,9 +229,9 @@ class _RegisterFormState extends State<RegisterForm> {
               value: selectedDepartment,
               items: departments
                   .map((department) => DropdownMenuItem(
-                value: department,
-                child: Text(department),
-              ))
+                        value: department,
+                        child: Text(department),
+                      ))
                   .toList(),
               onChanged: (value) {
                 setState(() {
@@ -253,9 +252,9 @@ class _RegisterFormState extends State<RegisterForm> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  final newUser = await _authentication
-                      .createUserWithEmailAndPassword(
-                      email: email, password: password);
+                  final newUser =
+                      await _authentication.createUserWithEmailAndPassword(
+                          email: email, password: password);
                   if (newUser.user != null) {
                     // Firestore에 유저 데이터 저장
                     await _firestore
@@ -283,8 +282,9 @@ class _RegisterFormState extends State<RegisterForm> {
                 style: TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                isButtonEnabled ? PrimaryColor : CaupingGray, // 비활성화 상태에서 회색
+                backgroundColor: isButtonEnabled
+                    ? PrimaryColor
+                    : CaupingGray, // 비활성화 상태에서 회색
                 minimumSize: const Size(double.infinity, 50),
               ),
             ),

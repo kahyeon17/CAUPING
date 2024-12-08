@@ -16,7 +16,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _authentication = FirebaseAuth.instance;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
