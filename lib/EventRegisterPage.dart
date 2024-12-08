@@ -305,7 +305,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
                 child: const Text("확인"),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         );

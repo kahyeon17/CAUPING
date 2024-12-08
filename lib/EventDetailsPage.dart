@@ -1,7 +1,6 @@
 import 'package:cauping/EventCard.dart';
 import 'package:flutter/material.dart';
 import 'EventInfo.dart';
-import 'Colors.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final EventInfo event;
@@ -12,9 +11,9 @@ class EventDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('행사 정보',
-            style: const TextStyle(
-              fontSize: 17,
+        title: const Text('행사 정보',
+            style: TextStyle(
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             )),
         centerTitle: true,

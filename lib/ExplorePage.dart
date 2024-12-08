@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'EventInfo.dart';
 import 'BuildingInfo.dart';
 import 'EventCard.dart';
+import 'Colors.dart';
 
 Map<String, EventInfo> bookmarkedEvents = {}; // 이벤트 ID별 북마크 상태를 저장하는 Map
 
@@ -160,7 +161,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 // 마커 생성
                 final marker = NMarker(
                   id: building.id,
-                  //size: Size(height: 5.0),
+                  size: const Size(30.0, 40.0),
                   position: building.markerPosition,
                   caption: NOverlayCaption(
                     text: building.name, // 캡션 텍스트
@@ -182,8 +183,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   id: "${building.id}_polygon",
                   coords: building.polygonCoords,
                   color: Colors.blue.withOpacity(0), // 테두리 내부 투명
-                  outlineColor: Colors.blue, // 테두리 색상
-                  outlineWidth: 3, // 테두리 두께
+                  outlineColor: PrimaryColor, // 테두리 색상
+                  outlineWidth: 1.8, // 테두리 두께
                 );
 
                 // 지도에 마커와 다각형 추가
@@ -295,7 +296,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                     const SizedBox(width: 2),
                                     const VerticalDivider(
                                       color: CaupingLightGray, // 선 색상
-                                      thickness: 3, // 선 두께
+                                      thickness: 2, // 선 두께
                                     ),
                                     const SizedBox(width: 2),
 
@@ -377,7 +378,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                             borderSide: const BorderSide(
-                                                color: Colors.blue),
+                                                color: PrimaryColor),
                                           ),
                                         ),
                                         hint: const Text(
@@ -416,7 +417,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return Center(
+                                    return const Center(
                                         child: CircularProgressIndicator());
                                   } else if (snapshot.hasError) {
                                     print('${snapshot.error}');
@@ -429,8 +430,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   } else {
                                     final events = snapshot.data!;
                                     return ListView.builder(
-                                      padding: EdgeInsets.only(
-                                          left: 3.0, right: 3.0), // 리스트 패딩 제거
+                                      padding: const EdgeInsets.only(
+                                          left: 3.0, right: 3.0),
                                       shrinkWrap: true, // 리스트 높이를 컨텐츠 크기로 설정
                                       physics:
                                           const ClampingScrollPhysics(), // 리스트 스크롤 제어

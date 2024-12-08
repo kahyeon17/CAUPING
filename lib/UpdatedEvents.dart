@@ -30,6 +30,7 @@ class _UpdatedEventsState extends State<UpdatedEvents> {
           titlePadding: const EdgeInsets.only(top: 20.0), // 제목 패딩 조정
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0), // 내용 패딩 조정
+          actionsPadding: const EdgeInsets.only(bottom: 20.0),
           title: const Text(
             '행사 삭제',
             textAlign: TextAlign.center, // 제목을 가운데 정렬
