@@ -37,7 +37,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             child: NaverMap(
               options: const NaverMapViewOptions(
                 initialCameraPosition: NCameraPosition(
-                  target: NLatLng(37.504872, 126.958013), // 첫 번째 건물 중심 좌표
+                  target: NLatLng(37.50413407, 126.95634038), // 첫 번째 건물 중심 좌표
                   zoom: 17, // 줌 레벨
                   bearing: 0, // 방향
                   tilt: 0, // 기울기
