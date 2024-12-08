@@ -74,34 +74,40 @@ class EventCard extends StatelessWidget {
                       event.description,
                       style: const TextStyle(fontSize: 15),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     // 사진 불러올 자리
                     if (event.images.isNotEmpty)
-                      GridView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true, // 부모 스크롤 안에서 동작하도록 설정
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // 한 줄에 3개의 이미지
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 4,
-                        ),
-                        itemCount: event.images.length,
-                        itemBuilder: (context, index) {
-                          return Image.network(
-                            event.images[index], // Firestore에서 가져온 이미지 URL
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
-                    const SizedBox(height: 10),
+                      _buildHorizontalImageScroll(event.images),
+                    const SizedBox(height: 15),
                   ],
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalImageScroll(List<String> images) {
+    return SizedBox(
+      height: 110,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: images.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ClipRRect(
+              child: Image.network(
+                images[index],
+                width: 110,
+                height: 110,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -152,24 +158,8 @@ class EventDetailsCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           //사진 불러올 자리
-          if (event!.images.isNotEmpty)
-            GridView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true, // 부모 스크롤 안에서 동작하도록 설정
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 한 줄에 3개의 이미지
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 4,
-              ),
-              itemCount: event!.images.length,
-              itemBuilder: (context, index) {
-                return Image.network(
-                  event!.images[index], // Firestore에서 가져온 이미지 URL
-                  fit: BoxFit.cover,
-                );
-              },
-            ),
+          if (event.images.isNotEmpty)
+            _buildHorizontalImageScroll(event.images),
           const SizedBox(height: 15),
           const Divider(
             color: CaupingLightGray, // 선 색상
@@ -269,6 +259,29 @@ class EventDetailsCard extends StatelessWidget {
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildHorizontalImageScroll(List<String> images) {
+    return SizedBox(
+      height: 190,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: images.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ClipRRect(
+              child: Image.network(
+                images[index],
+                width: 190,
+                height: 150,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
